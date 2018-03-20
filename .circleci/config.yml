@@ -21,7 +21,6 @@ jobs:
           command: |
             mkdir -p ~/phpunit
             ./vendor/bin/phpunit --log-junit ~/phpunit/junit.xml tests
-        when: always
       - run: bash <(curl -s https://codecov.io/bash)
       - store_test_results:
           path: ~/phpunit
