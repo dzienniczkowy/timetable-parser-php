@@ -21,7 +21,7 @@ jobs:
       - run:
           command: |
             mkdir -p ~/phpunit
-            ./vendor/bin/phpunit --log-junit ~/phpunit/junit.xml tests
+            ./vendor/bin/phpunit --log-junit ~/phpunit/junit.xml --coverage-clover=coverage.xml
       - run: bash <(curl -s https://codecov.io/bash)
       - store_test_results:
           path: ~/phpunit
