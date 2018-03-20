@@ -1,0 +1,28 @@
+{
+    "name": "wulkanowy/timetable-parser",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikołaj Pich",
+            "email": "m.pich@outlook.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "scotteh/php-dom-wrapper": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wulkanowy\\TimetableParser\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wulkanowy\\Tests\\TimetableParser\\": "tests/"
+        }
+    }
+}
