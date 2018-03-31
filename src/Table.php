@@ -23,7 +23,10 @@ class Table
 
         $this->setLessonHoursToDays($table, $days);
 
-        return $days;
+        return [
+            'name' => $this->doc->find('.tytulnapis')->text(),
+            'days' => $days,
+        ];
     }
 
     private function getDays(NodeList $headerCells): array
