@@ -20,6 +20,12 @@ class TimetableListTest extends TestCase
         $this->expandable = new TimetableList(file_get_contents(__DIR__.'/fixtures/lista-expandable.html'));
     }
 
+    public function testGetListUrl(): void
+    {
+        $index = new TimetableList(file_get_contents(__DIR__.'/fixtures/index.html'));
+        $this->assertEquals('lista.html', $index->getListUrl());
+    }
+
     public function testClassDataSelect(): void
     {
         $this->assertCount(2, $this->select->getTimetableList()['classes']);
