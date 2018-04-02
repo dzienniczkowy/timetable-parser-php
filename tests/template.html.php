@@ -87,7 +87,7 @@
         </tr>
         <tr>
             <td align="left">
-                <?=$table['description'];?>
+                <?=$table['description']; ?>
             </td></tr>
         <tr>
             <td align="left">
@@ -97,7 +97,7 @@
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td align="right">
-                            wygenerowano <?=$table['generated'];?><br>
+                            wygenerowano <?=$table['generated']; ?><br>
                             za pomocą programu
                             <a href="http://www.vulcan.edu.pl/dla_szkol/optivum/plan_lekcji/Strony/wstep.aspx" target="_blank">Plan lekcji Optivum</a><br>
                             firmy <a href="http://www.vulcan.edu.pl/" target="_blank">VULCAN</a></td>
