@@ -69,22 +69,40 @@ class TableTest extends TestCase
         $this->assertEquals('15:35', $this->table->getTable()['days'][4]['hours'][8]['end']);
     }
 
-    public function testGetTableLessonTeacher(): void
+    public function testGetTableLessonTeacherName(): void
     {
-        $this->assertEquals('PR', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['teacher']);
-        $this->assertEquals('Dr', $this->table->getTable()['days'][0]['hours'][0]['lessons'][1]['teacher']);
-        $this->assertEquals('Ho', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['teacher']);
-        $this->assertEquals('Oż', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['teacher']);
-        $this->assertEquals('', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['teacher']);
+        $this->assertEquals('PR', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['teacher']['name']);
+        $this->assertEquals('Dr', $this->table->getTable()['days'][0]['hours'][0]['lessons'][1]['teacher']['name']);
+        $this->assertEquals('Ho', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['teacher']['name']);
+        $this->assertEquals('Oż', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['teacher']['name']);
+        $this->assertEquals('', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['teacher']['name']);
     }
 
-    public function testGetTableLessonRoom(): void
+    public function testGetTableLessonTeacherValue(): void
     {
-        $this->assertEquals('33', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['room']);
-        $this->assertEquals('35', $this->table->getTable()['days'][0]['hours'][0]['lessons'][1]['room']);
-        $this->assertEquals('21', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['room']);
-        $this->assertEquals('32', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['room']);
-        $this->assertEquals('19', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['room']);
+        $this->assertEquals('49', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['teacher']['value']);
+        $this->assertEquals('14', $this->table->getTable()['days'][0]['hours'][0]['lessons'][1]['teacher']['value']);
+        $this->assertEquals('25', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['teacher']['value']);
+        $this->assertEquals('42', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['teacher']['value']);
+        $this->assertEquals('', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['teacher']['value']);
+    }
+
+    public function testGetTableLessonRoomName(): void
+    {
+        $this->assertEquals('33', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['room']['name']);
+        $this->assertEquals('35', $this->table->getTable()['days'][0]['hours'][0]['lessons'][1]['room']['name']);
+        $this->assertEquals('21', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['room']['name']);
+        $this->assertEquals('32', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['room']['name']);
+        $this->assertEquals('19', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['room']['name']);
+    }
+
+    public function testGetTableLessonRoomValue(): void
+    {
+        $this->assertEquals('11', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['room']['value']);
+        $this->assertEquals('13', $this->table->getTable()['days'][0]['hours'][0]['lessons'][1]['room']['value']);
+        $this->assertEquals('4', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['room']['value']);
+        $this->assertEquals('10', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['room']['value']);
+        $this->assertEquals('3', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['room']['value']);
     }
 
     public function testGetTableLessonSubject(): void
@@ -98,8 +116,14 @@ class TableTest extends TestCase
 
     public function testGetTableLessonClassName(): void
     {
-        $this->assertEquals('2Tc', $this->tableRoom->getTable()['days'][0]['hours'][0]['lessons'][0]['className']);
-        $this->assertEquals('4Tp', $this->tableRoom->getTable()['days'][1]['hours'][0]['lessons'][0]['className']);
+        $this->assertEquals('2Tc', $this->tableRoom->getTable()['days'][0]['hours'][0]['lessons'][0]['className']['name']);
+        $this->assertEquals('4Tp', $this->tableRoom->getTable()['days'][1]['hours'][0]['lessons'][0]['className']['name']);
+    }
+
+    public function testGetTableLessonClassValue(): void
+    {
+        $this->assertEquals('8', $this->tableRoom->getTable()['days'][0]['hours'][0]['lessons'][0]['className']['value']);
+        $this->assertEquals('29', $this->tableRoom->getTable()['days'][1]['hours'][0]['lessons'][0]['className']['value']);
     }
 
     public function testGetTableLessonClassAlt(): void

@@ -82,10 +82,10 @@ class Table
 
         if (\count($hour['lessons']) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {
             $hour['lessons'][] = [
-                'teacher' => '',
+                'teacher' => ['name' => '', 'value' => ''],
+                'room' => ['name' => '', 'value' => ''],
+                'className' => ['name' => '', 'value' => ''],
                 'subject' => '',
-                'room' => '',
-                'className' => '',
                 'alt' => $current->text(),
             ];
         }
@@ -95,21 +95,35 @@ class Table
 
     private function getLesson(Element $cell): array
     {
-        $values = [
-            'teacher' => $cell->findXPath('./*[@class="n"]')->text(),
-            'subject' => $cell->findXPath('./*[@class="p"]')->text(),
-            'room' => $cell->findXPath('./*[@class="s"]')->text(),
-            'className' => $cell->findXPath('./*[@class="o"]')->text(),
+        $teacher = $cell->findXPath('./*[@class="n"]');
+        $room = $cell->findXPath('./*[@class="s"]');
+        $className = $cell->findXPath('./*[@class="o"]');
+        $subject = $cell->findXPath('./*[@class="p"]');
+
+        $lesson = [
+            'teacher' => ['name' => $teacher->text(), 'value' => $this->getUrlValue($teacher->first(), 'n')],
+            'room' => ['name' => $room->text(), 'value' => $this->getUrlValue($room->first(), 's')],
+            'className' => ['name' => $className->text(), 'value' => $this->getUrlValue($className->first(), 'o')],
+            'subject' => $subject->text(),
             'alt' => '',
             'diversion' => false,
         ];
 
         if ($cell->findXPath('./*[@class="p"]')->count() > 1) {
-            $values['subject'] = $cell->findXPath('./*[@class="p"]')->first()->text()
+            $lesson['subject'] = $subject->first()->text()
                 . trim($cell->findXPath('./text()[(preceding::*[@class="p"])]')->text())
-                . ' ' . $cell->findXPath('./*[@class="p"]')->end()->text();
+                . ' ' . $subject->end()->text();
         }
 
-        return $values;
+        return $lesson;
+    }
+
+    private function getUrlValue(?Element $el, string $prefix): string
+    {
+        if (null === $el) {
+            return '';
+        }
+
+        return str_replace([$prefix, '.html'], '', $el->attr('href'));
     }
 }
