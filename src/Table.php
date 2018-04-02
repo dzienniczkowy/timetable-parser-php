@@ -85,14 +85,31 @@ class Table
 
         $subject = $current->findXPath('./*[@class="p"]');
 
-        if ($current->findXPath('./br')->count() && $spans->count() == 0 && $subject->count() > 1) {
-           foreach (explode('<br>', $current->getOuterHtml()) as $item) {
-               $doc = new Document();
-               $doc->html(str_replace('<td class="l">', '', $item));
-               $hour['lessons'][] = $this->getLesson($doc->find('body')->first());
-           }
-        } elseif ($subject->count() !== 0) {
+        if ($current->findXPath('./br')->count() && $spans->count() === 0 && $subject->count() > 1) {
+            foreach (explode('<br>', $current->getOuterHtml()) as $item) {
+                $doc = new Document();
+                $doc->html(str_replace('<td class="l">', '', $item));
+                $hour['lessons'][] = $this->getLesson($doc->find('body')->first());
+            }
+        } elseif ($subject->count() > 0) {
             $hour['lessons'][] = $this->getLesson($current);
+        }
+
+        $className = $current->findXPath('./*[@class="o"]');
+        if ($className->count() > 1) {
+            unset($hour['lessons'][\count($hour['lessons']) - 1]['className']);
+            unset($hour['lessons'][\count($hour['lessons']) - 1]['alt']);
+            /** @var Element $item */
+            foreach (explode(',', $current->getOuterHtml()) as $item) {
+                $doc = new Document();
+                $doc->html(str_replace('<td class="l">', '', $item));
+                $el = $doc->find('body')->first();
+                $hour['lessons'][\count($hour['lessons']) - 1]['className'][] = [
+                    'name'  => trim($el->find('a.o')->text()),
+                    'value' => $this->getUrlValue($el->find('a.o')->first(), 'o'),
+                    'alt'   => trim($el->findXPath('./text()')->text()),
+                ];
+            }
         }
 
         if (\count($hour['lessons']) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {

@@ -45,8 +45,15 @@
                                                 <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
                                             <?php endif; ?>
 
-                                            <?php if ($lesson['className']['value']): ?>
+                                            <?php if (isset($lesson['className']['value']) && !empty($lesson['className']['value'])): ?>
                                                 <a href="o<?=$lesson['className']['value']; ?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? $lesson['alt']; ?>
+                                            <?php elseif (isset($lesson['className'][0])): ?>
+                                                <?php foreach ((array) $lesson['className'] as $group):
+                                                    ?><a href="o<?= $group['value']; ?>.html" class="o"><?=str_replace($group['alt'], '', $group['name']);
+                                                    ?></a><?=$group['alt'];?><?php
+                                                    if ($group !== end($lesson['className'])):
+                                                        ?>,<?php endif; ?><?php
+                                                endforeach; ?>
                                             <?php endif; ?>
 
                                             <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
@@ -60,7 +67,7 @@
                                                 <?php endif; ?>
                                             <?php endif; ?>
 
-                                            <?php if ($lesson['teacher']['value'] && empty($lesson['className']['value'])): ?>
+                                            <?php if ($lesson['teacher']['value'] && isset($lesson['className']['value']) && empty($lesson['className']['value'])): ?>
                                                 <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
                                             <?php endif; ?>
 
