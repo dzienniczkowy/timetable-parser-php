@@ -77,12 +77,21 @@ class Table
 
         /** @var Element $current */
         $current = $rowCells->get($index);
+        $spans = $current->find('span[style]');
 
-        foreach ($current->find('span[style]') as $group) {
+        foreach ($spans as $group) {
             $hour['lessons'][] = array_merge($this->getLesson($group), ['diversion' => true]);
         }
 
-        if ($current->findXPath('./*[@class="p"]')->count() !== 0) {
+        $subject = $current->findXPath('./*[@class="p"]');
+
+        if ($current->findXPath('./br')->count() && $spans->count() == 0 && $subject->count() > 1) {
+           foreach (explode('<br>', $current->getOuterHtml()) as $item) {
+               $doc = new Document();
+               $doc->html(str_replace('<td class="l">', '', $item));
+               $hour['lessons'][] = $this->getLesson($doc->find('body')->first());
+           }
+        } elseif ($subject->count() !== 0) {
             $hour['lessons'][] = $this->getLesson($current);
         }
 

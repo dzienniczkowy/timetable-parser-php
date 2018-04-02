@@ -70,9 +70,9 @@
 
                                             <?php if ($lesson['diversion']): ?>
                                                 </span>
-                                                <?php if ($lesson !== end($lessons)): ?>
-                                                    <br>
-                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            <?php if ($lesson !== end($lessons)): ?>
+                                                <br>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                     </td>
