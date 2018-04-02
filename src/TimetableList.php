@@ -36,9 +36,9 @@ class TimetableList
     private function getTimetableSelectListType(): array
     {
         return [
-            'classes' => $this->getSelectListValues('oddzialy'),
+            'classes'  => $this->getSelectListValues('oddzialy'),
             'teachers' => $this->getSelectListValues('nauczyciele'),
-            'rooms' => $this->getSelectListValues('sale')
+            'rooms'    => $this->getSelectListValues('sale'),
         ];
     }
 
@@ -51,7 +51,7 @@ class TimetableList
         /** @var Element $class */
         foreach ($nodes as $class) {
             $values[] = [
-                'name' => $class->text(),
+                'name'  => $class->text(),
                 'value' => $class->attr('value'),
             ];
         }
@@ -80,9 +80,9 @@ class TimetableList
     private function getTimetableUrlSubType(string $classQ, string $teachersQ, string $roomsQ): array
     {
         return [
-            'classes' => $this->getSubTypeValue($classQ, 'o'),
+            'classes'  => $this->getSubTypeValue($classQ, 'o'),
             'teachers' => $this->getSubTypeValue($teachersQ, 'n'),
-            'rooms' => $this->getSubTypeValue($roomsQ, 's'),
+            'rooms'    => $this->getSubTypeValue($roomsQ, 's'),
         ];
     }
 
@@ -90,10 +90,10 @@ class TimetableList
     {
         $values = [];
 
-        /** @var Element $class */
+        /* @var Element $class */
         foreach ($this->doc->find($query) as $item) {
             $values[] = [
-                'name' => $item->text(),
+                'name'  => $item->text(),
                 'value' => str_replace(
                     'plany/'.$prefix,
                     '',

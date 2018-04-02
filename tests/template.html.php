@@ -1,8 +1,8 @@
 <html><head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Language" content="pl">
-    <meta name="description" content=". /nPlan lekcji <?=$table['typeName'];?> <?=$table['name']; ?>/n utworzony za pomocą programu Plan lekcji Optivum firmy VULCAN">
-    <title>Plan lekcji <?=$table['typeName'];?> - <?=$table['name']; ?></title>
+    <meta name="description" content=". /nPlan lekcji <?=$table['typeName']; ?> <?=$table['name']; ?>/n utworzony za pomocą programu Plan lekcji Optivum firmy VULCAN">
+    <title>Plan lekcji <?=$table['typeName']; ?> - <?=$table['name']; ?></title>
     <link rel="stylesheet" href="../css/plan.css" type="text/css">
     <script language="JavaScript1.2" type="text/javascript" src="../scripts/plan.js"></script>
 </head>
@@ -20,22 +20,22 @@
                     <tr>
                         <th>Nr</th>
                         <th>Godz</th>
-                        <?php foreach ((array)$table['days'] as $day): ?>
+                        <?php foreach ((array) $table['days'] as $day): ?>
                             <th><?= $day['name']; ?></th>
                         <?php endforeach; ?>
                     </tr>
-                    <?php foreach ((array)$table['days'][0]['hours'] as $i => $hour): ?>
+                    <?php foreach ((array) $table['days'][0]['hours'] as $i => $hour): ?>
                         <tr>
                             <td class="nr"><?= $hour['number']; ?></td>
                             <td class="g"><?=$hour['start'] < 10 ? ' ' : ''; ?><?= $hour['start']; ?>-<?=$hour['end'] < 10 ? ' ' : ''; ?><?= $hour['end']; ?></td>
 
-                            <?php foreach ((array)$table['days'] as $key => $day): ?>
+                            <?php foreach ((array) $table['days'] as $key => $day): ?>
                                 <?php $lessons = $day['hours'][$i]['lessons']; ?>
                                 <?php if (count($lessons) > 0): ?>
                                     <td class="l">
-                                        <?php foreach ((array)$lessons as $lesson): ?>
+                                        <?php foreach ((array) $lessons as $lesson): ?>
                                             <?php if (empty($lessons[0]['subject'])): ?>
-                                                <?=$lessons[0]['alt'];?>
+                                                <?=$lessons[0]['alt']; ?>
                                                 <?php continue; ?>
                                             <?php endif; ?>
 
@@ -46,13 +46,13 @@
                                             <?php endif; ?>
 
                                             <?php if ($lesson['className']['value']): ?>
-                                                <a href="o<?=$lesson['className']['value'];?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? $lesson['alt']; ?>
+                                                <a href="o<?=$lesson['className']['value']; ?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? $lesson['alt']; ?>
                                             <?php endif; ?>
 
                                             <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
                                             <?php $subject = explode($lesson['alt'], $lesson['subject']); ?>
-                                                <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt'];?>
-                                                <span class="p"><?=trim($subject[1]);?></span>
+                                                <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt']; ?>
+                                                <span class="p"><?=trim($subject[1]); ?></span>
                                             <?php elseif ($lesson['subject']): ?>
                                                 <span class="p"><?=$lesson['subject']; ?></span>
                                                 <?php if (empty($lesson['room']['value'])): ?>

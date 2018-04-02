@@ -19,16 +19,16 @@ class Table
     public function getTable(): array
     {
         $table = $this->doc->find('.tabela')->first();
-        $days  = $this->getDays($table->find('tr th'));
+        $days = $this->getDays($table->find('tr th'));
 
         $this->setLessonHoursToDays($table, $days);
 
         $title = explode(' ', $this->doc->find('title')->text());
 
         return [
-            'name' => $this->doc->find('.tytulnapis')->text(),
+            'name'     => $this->doc->find('.tytulnapis')->text(),
             'typeName' => $title[2],
-            'days' => $days,
+            'days'     => $days,
         ];
     }
 
@@ -65,7 +65,7 @@ class Table
     private function getHourWithLessons(NodeList $rowCells, int $index): array
     {
         $hours = explode('-', $rowCells->get(1)->textContent);
-        $hour  = [
+        $hour = [
             'number'  => $rowCells->get(0)->textContent,
             'start'   => trim($hours[0]),
             'end'     => trim($hours[1]),
@@ -99,10 +99,10 @@ class Table
 
     private function getLesson(Element $cell): array
     {
-        $teacher   = $cell->findXPath('./*[@class="n"]');
-        $room      = $cell->findXPath('./*[@class="s"]');
+        $teacher = $cell->findXPath('./*[@class="n"]');
+        $room = $cell->findXPath('./*[@class="s"]');
         $className = $cell->findXPath('./*[@class="o"]');
-        $subject   = $cell->findXPath('./*[@class="p"]');
+        $subject = $cell->findXPath('./*[@class="p"]');
 
         $lesson = [
             'teacher'   => [
