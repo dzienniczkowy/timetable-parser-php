@@ -95,7 +95,7 @@ class Table
 
     private function getLesson(Element $cell): array
     {
-        return [
+        $values = [
             'teacher' => $cell->findXPath('./*[@class="n"]')->text(),
             'subject' => $cell->findXPath('./*[@class="p"]')->text(),
             'room' => $cell->findXPath('./*[@class="s"]')->text(),
@@ -103,5 +103,13 @@ class Table
             'alt' => '',
             'diversion' => false,
         ];
+
+        if ($cell->findXPath('./*[@class="p"]')->count() > 1) {
+            $values['subject'] = $cell->findXPath('./*[@class="p"]')->first()->text()
+                . trim($cell->findXPath('./text()[(preceding::*[@class="p"])]')->text())
+                . ' ' . $cell->findXPath('./*[@class="p"]')->end()->text();
+        }
+
+        return $values;
     }
 }
