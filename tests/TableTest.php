@@ -29,6 +29,24 @@ class TableTest extends TestCase
         $this->assertEquals('21 prac. historii', $this->tableRoom->getTable()['name']);
     }
 
+    public function testGetTableTypeName(): void
+    {
+        $this->assertEquals('oddziału', $this->table->getTable()['typeName']);
+        $this->assertEquals('sali', $this->tableRoom->getTable()['typeName']);
+    }
+
+    public function testGetTableGenerated(): void
+    {
+        $this->assertEquals('17.02.2018', $this->table->getTable()['generated']);
+        $this->assertEquals('17.02.2018', $this->tableRoom->getTable()['generated']);
+    }
+
+    public function testGetTableDescription(): void
+    {
+        $this->assertEquals('Obowiązuje od: 19 lutego 2018r.', $this->table->getTable()['description']);
+        $this->assertEquals('Obowiązuje od: 19 lutego 2018r.', $this->tableRoom->getTable()['description']);
+    }
+
     public function testGetTableDays(): void
     {
         $this->assertEquals('Poniedziałek', $this->table->getTable()['days'][0]['name']);
@@ -100,6 +118,7 @@ class TableTest extends TestCase
         $this->assertEquals('4', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['room']['value']);
         $this->assertEquals('13', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['room']['value']);
         $this->assertEquals('3', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['room']['value']);
+        $this->assertEquals('', $this->table->getTable()['days'][4]['hours'][9]['lessons'][0]['room']['value']);
     }
 
     public function testGetTableLessonSubject(): void
@@ -108,6 +127,7 @@ class TableTest extends TestCase
         $this->assertEquals('j.polski', $this->table->getTable()['days'][0]['hours'][4]['lessons'][0]['subject']);
         $this->assertEquals('sieci.komput-1/2', $this->table->getTable()['days'][1]['hours'][8]['lessons'][0]['subject']);
         $this->assertEquals('r_fizyka-2/2 #3fi', $this->table->getTable()['days'][1]['hours'][8]['lessons'][1]['subject']);
+        $this->assertEquals('', $this->table->getTable()['days'][4]['hours'][9]['lessons'][0]['subject']);
     }
 
     public function testGetTableLessonClassName(): void
@@ -126,5 +146,6 @@ class TableTest extends TestCase
     {
         $this->assertEquals('', $this->table->getTable()['days'][0]['hours'][0]['lessons'][0]['alt']);
         $this->assertEquals('-2/3', $this->tableRoom->getTable()['days'][1]['hours'][0]['lessons'][0]['alt']);
+        $this->assertEquals('Zajęcia dodatkowe', $this->table->getTable()['days'][4]['hours'][9]['lessons'][0]['alt']);
     }
 }

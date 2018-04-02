@@ -24,11 +24,14 @@ class Table
         $this->setLessonHoursToDays($table, $days);
 
         $title = explode(' ', $this->doc->find('title')->text());
+        $generated = explode(' ', trim($this->doc->find('td[align=right]')->end()->text()));
 
         return [
-            'name'     => $this->doc->find('.tytulnapis')->text(),
-            'typeName' => $title[2],
-            'days'     => $days,
+            'name'        => $this->doc->find('.tytulnapis')->text(),
+            'generated'   => trim($generated[1]),
+            'description' => trim($this->doc->find('td[align=left]')->first()->text()),
+            'typeName'    => $title[2],
+            'days'        => $days,
         ];
     }
 
@@ -90,7 +93,7 @@ class Table
                 'className' => ['name' => '', 'value' => ''],
                 'subject'   => '',
                 'diversion' => false,
-                'alt'       => $current->text(),
+                'alt'       => trim($current->text()),
             ];
         }
 
