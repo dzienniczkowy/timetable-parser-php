@@ -7,7 +7,9 @@
 [![Total Downloads](https://poser.pugx.org/wulkanowy/timetable-parser/downloads?format=flat-square)](https://packagist.org/packages/wulkanowy/timetable-parser)
 
 
-Installation
+## Instalacja
+
+Parser planów wygenerowanych w programie Plan lekcji Optivum firmy VULCAN.
 
 Via composer
 
