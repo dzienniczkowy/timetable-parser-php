@@ -24,7 +24,7 @@ class Table
         $this->setLessonHoursToDays($table, $days);
 
         $title = explode(' ', $this->doc->find('title')->text());
-        $generated = explode(' ', trim($this->doc->find('td[align=right]')->end()->text()));
+        $generated = preg_split('/\s+/', trim($this->doc->find('td[align=right]')->end()->text()));
 
         return [
             'name'        => $this->doc->find('.tytulnapis')->text(),
