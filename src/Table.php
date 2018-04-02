@@ -72,12 +72,12 @@ class Table
         /** @var Element $current */
         $current = $rowCells->get($index);
 
-        if ($current->findXPath('./*[@class="p"]')->count() !== 0) {
-            $hour['lessons'][] = $this->getLesson($current);
+        foreach ($current->find('span[style]') as $group) {
+            $hour['lessons'][] = array_merge($this->getLesson($group), ['diversion' => true]);
         }
 
-        foreach ($current->find('span[style]') as $group) {
-            $hour['lessons'][] = $this->getLesson($group);
+        if ($current->findXPath('./*[@class="p"]')->count() !== 0) {
+            $hour['lessons'][] = $this->getLesson($current);
         }
 
         if (\count($hour['lessons']) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {
@@ -101,6 +101,7 @@ class Table
             'room' => $cell->findXPath('./*[@class="s"]')->text(),
             'className' => $cell->findXPath('./*[@class="o"]')->text(),
             'alt' => '',
+            'diversion' => false,
         ];
     }
 }
