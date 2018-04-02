@@ -152,7 +152,6 @@ class TableTest extends TestCase
         $this->assertEquals('28', $this->tableRoom->getTable()['days'][0]['hours'][0]['lessons'][0]['className']['value']);
         $this->assertEquals('29', $this->tableRoom->getTable()['days'][1]['hours'][0]['lessons'][0]['className']['value']);
 
-
         $this->assertEquals('20', $this->tableRoom->getTable()['days'][3]['hours'][0]['lessons'][0]['className'][0]['value']);
         $this->assertEquals('18', $this->tableRoom->getTable()['days'][3]['hours'][0]['lessons'][0]['className'][2]['value']);
     }

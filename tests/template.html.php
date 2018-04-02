@@ -50,7 +50,7 @@
                                             <?php elseif (isset($lesson['className'][0])): ?>
                                                 <?php foreach ((array) $lesson['className'] as $group):
                                                     ?><a href="o<?= $group['value']; ?>.html" class="o"><?=str_replace($group['alt'], '', $group['name']);
-                                                    ?></a><?=$group['alt'];?><?php
+                                                    ?></a><?=$group['alt']; ?><?php
                                                     if ($group !== end($lesson['className'])):
                                                         ?>,<?php endif; ?><?php
                                                 endforeach; ?>
