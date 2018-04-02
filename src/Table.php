@@ -19,12 +19,15 @@ class Table
     public function getTable(): array
     {
         $table = $this->doc->find('.tabela')->first();
-        $days = $this->getDays($table->find('tr th'));
+        $days  = $this->getDays($table->find('tr th'));
 
         $this->setLessonHoursToDays($table, $days);
 
+        $title = explode(' ', $this->doc->find('title')->text());
+
         return [
             'name' => $this->doc->find('.tytulnapis')->text(),
+            'typeName' => $title[2],
             'days' => $days,
         ];
     }
@@ -62,10 +65,10 @@ class Table
     private function getHourWithLessons(NodeList $rowCells, int $index): array
     {
         $hours = explode('-', $rowCells->get(1)->textContent);
-        $hour = [
-            'number' => $rowCells->get(0)->textContent,
-            'start' => trim($hours[0]),
-            'end' => trim($hours[1]),
+        $hour  = [
+            'number'  => $rowCells->get(0)->textContent,
+            'start'   => trim($hours[0]),
+            'end'     => trim($hours[1]),
             'lessons' => [],
         ];
 
@@ -82,11 +85,12 @@ class Table
 
         if (\count($hour['lessons']) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {
             $hour['lessons'][] = [
-                'teacher' => ['name' => '', 'value' => ''],
-                'room' => ['name' => '', 'value' => ''],
+                'teacher'   => ['name' => '', 'value' => ''],
+                'room'      => ['name' => '', 'value' => ''],
                 'className' => ['name' => '', 'value' => ''],
-                'subject' => '',
-                'alt' => $current->text(),
+                'subject'   => '',
+                'diversion' => false,
+                'alt'       => $current->text(),
             ];
         }
 
@@ -95,24 +99,33 @@ class Table
 
     private function getLesson(Element $cell): array
     {
-        $teacher = $cell->findXPath('./*[@class="n"]');
-        $room = $cell->findXPath('./*[@class="s"]');
+        $teacher   = $cell->findXPath('./*[@class="n"]');
+        $room      = $cell->findXPath('./*[@class="s"]');
         $className = $cell->findXPath('./*[@class="o"]');
-        $subject = $cell->findXPath('./*[@class="p"]');
+        $subject   = $cell->findXPath('./*[@class="p"]');
 
         $lesson = [
-            'teacher' => ['name' => $teacher->text(), 'value' => $this->getUrlValue($teacher->first(), 'n')],
-            'room' => ['name' => $room->text(), 'value' => $this->getUrlValue($room->first(), 's')],
-            'className' => ['name' => $className->text(), 'value' => $this->getUrlValue($className->first(), 'o')],
-            'subject' => $subject->text(),
-            'alt' => '',
+            'teacher'   => [
+                'name'  => $teacher->text(),
+                'value' => $this->getUrlValue($teacher->first(), 'n'),
+            ],
+            'room'      => [
+                'name'  => $room->text(),
+                'value' => $this->getUrlValue($room->first(), 's'),
+            ],
+            'className' => [
+                'name'  => $className->text(),
+                'value' => $this->getUrlValue($className->first(), 'o'),
+            ],
+            'subject'   => $subject->text(),
             'diversion' => false,
+            'alt'       => trim($cell->findXPath('./text()')->text()),
         ];
 
         if ($cell->findXPath('./*[@class="p"]')->count() > 1) {
             $lesson['subject'] = $subject->first()->text()
-                . trim($cell->findXPath('./text()[(preceding::*[@class="p"])]')->text())
-                . ' ' . $subject->end()->text();
+                .trim($cell->findXPath('./text()[(preceding::*[@class="p"])]')->text())
+                .' '.$subject->end()->text();
         }
 
         return $lesson;

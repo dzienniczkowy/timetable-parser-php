@@ -13,7 +13,8 @@
         "scotteh/php-dom-wrapper": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.0",
+        "mihaeu/html-formatter": "^1.0"
     },
     "autoload": {
         "psr-4": {
