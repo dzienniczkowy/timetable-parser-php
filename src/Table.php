@@ -87,9 +87,9 @@ class Table
 
         if ($spans->count() > 0 && $subject->count() === 0) {
             foreach ($spans as $group) {
-                $lessons[] = array_merge($this->getLesson($group), ['diversion' => true]);
+                $lessons[] = array_merge($this->getLesson($group, true));
             }
-        } elseif ($subject->count() > 0 && \count($chunks) > 0) {
+        } elseif (\count($chunks) > 0 && $subject->count() > 0) {
             foreach ($chunks as $item) {
                 $this->setLessonFromChunk($lessons, $item);
             }
@@ -111,7 +111,7 @@ class Table
         $body = $doc->find('body');
 
         if ($span->count() > 0) {
-            $lessons[] = array_merge($this->getLesson($span->first()), ['diversion' => true]);
+            $lessons[] = array_merge($this->getLesson($span->first(), true));
         } elseif ($cell->count() > 0) {
             $lessons[] = $this->getLesson($cell->first());
         } elseif ($body->count() > 0) {
@@ -122,14 +122,7 @@ class Table
     private function setFallbackLesson(Element $current, array &$lessons): void
     {
         if (\count($lessons) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {
-            $lessons[] = [
-                'teacher'   => ['name' => '', 'value' => ''],
-                'room'      => ['name' => '', 'value' => ''],
-                'className' => ['name' => '', 'value' => ''],
-                'subject'   => '',
-                'diversion' => false,
-                'alt'       => trim($current->text()),
-            ];
+            $lessons[] = $this->getLesson($current);
         }
     }
 
@@ -156,16 +149,16 @@ class Table
         }
     }
 
-    private function getLesson(Element $cell): array
+    private function getLesson(Element $cell, bool $diversion = false): array
     {
         $subject = $cell->findXPath('./*[@class="p"]');
 
         $lesson = [
-            'teacher'   => $this->getLessonPartValue($cell->findXPath('./*[@class="n"]'), 'n'),
-            'room'      => $this->getLessonPartValue($cell->findXPath('./*[@class="s"]'), 's'),
-            'className' => $this->getLessonPartValue($cell->findXPath('./*[@class="o"]'), 'o'),
+            'teacher'   => $this->getLessonPartValues($cell->findXPath('./*[@class="n"]'), 'n'),
+            'room'      => $this->getLessonPartValues($cell->findXPath('./*[@class="s"]'), 's'),
+            'className' => $this->getLessonPartValues($cell->findXPath('./*[@class="o"]'), 'o'),
             'subject'   => $subject->text(),
-            'diversion' => false,
+            'diversion' => $diversion,
             'alt'       => trim($cell->findXPath('./text()')->text()),
         ];
 
@@ -178,7 +171,7 @@ class Table
         return $lesson;
     }
 
-    private function getLessonPartValue(NodeList $part, string $prefix): array
+    private function getLessonPartValues(NodeList $part, string $prefix): array
     {
         return [
             'name'  => $part->text(),
