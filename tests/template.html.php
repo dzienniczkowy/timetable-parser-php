@@ -41,7 +41,7 @@
 
                                             <?php if ($lesson['diversion']): ?><span style="font-size:85%"><?php endif; ?>
 
-                                            <?php if ($lesson['teacher']['value'] && empty($lesson['room']['value'])): ?>
+                                            <?php if ($lesson['teacher']['value'] && empty($lesson['room']['name'])): ?>
                                                 <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
                                             <?php endif; ?>
 
@@ -62,7 +62,7 @@
                                                 <span class="p"><?=trim($subject[1]); ?></span>
                                             <?php elseif ($lesson['subject']): ?>
                                                 <span class="p"><?=$lesson['subject']; ?></span>
-                                                <?php if (empty($lesson['room']['value'])): ?>
+                                                <?php if (empty($lesson['room']['name'])): ?>
                                                     <br>
                                                 <?php endif; ?>
                                             <?php endif; ?>
@@ -71,9 +71,18 @@
                                                 <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
                                             <?php endif; ?>
 
-                                            <?php if ($lesson['room']['value']): ?>
-                                                <a href="s<?=$lesson['room']['value']; ?>.html" class="s"><?= $lesson['room']['name']; ?></a>
+                                            <?php if ($lesson['room']['name']): ?>
+                                                <?php if ($lesson['room']['value']): ?>
+                                                    <a href="s<?=$lesson['room']['value']; ?>.html" class="s"><?= $lesson['room']['name']; ?></a>
+                                                <?php else: ?>
+                                                    <span class="s"><?=$lesson['room']['name']; ?></span>
+                                                <?php endif; ?>
                                             <?php endif; ?>
+
+                                            <?php if (is_array($lesson['className']) &&
+                                                $table['typeName'] === 'nauczyciela' &&
+                                                $lesson === end($lessons)
+                                            ): ?><br><?php endif; ?>
 
                                             <?php if ($lesson['diversion']): ?>
                                                 </span>
@@ -93,9 +102,7 @@
             </td>
         </tr>
         <tr>
-            <td align="left">
-                <?=$table['description']; ?>
-            </td></tr>
+            <td align="left"><?=$table['description']; ?></td></tr>
         <tr>
             <td align="left">
                 <a href="javascript:window.print()">Drukuj plan</a>
@@ -103,11 +110,7 @@
             <td class="op" align="right">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td align="right">
-                            wygenerowano <?=$table['generated']; ?><br>
-                            za pomocą programu
-                            <a href="http://www.vulcan.edu.pl/dla_szkol/optivum/plan_lekcji/Strony/wstep.aspx" target="_blank">Plan lekcji Optivum</a><br>
-                            firmy <a href="http://www.vulcan.edu.pl/" target="_blank">VULCAN</a></td>
+                        <td align="right">wygenerowano <?=$table['generated']; ?><br>za pomocą programu<a href="http://www.vulcan.edu.pl/dla_szkol/optivum/plan_lekcji/Strony/wstep.aspx" target="_blank">Plan lekcji Optivum</a><br>firmy <a href="http://www.vulcan.edu.pl/" target="_blank">VULCAN</a></td>
                         <td>
                             <img border="0" src="../images/plan_logo.gif" style="margin-left:10" alt="logo programu Plan lekcji Optivum" width="40" height="40">
                         </td>

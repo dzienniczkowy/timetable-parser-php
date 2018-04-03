@@ -77,23 +77,8 @@ class Table
 
         /** @var Element $current */
         $current = $rowCells->get($index);
-        $spans = $current->find('span[style]');
 
-        foreach ($spans as $group) {
-            $hour['lessons'][] = array_merge($this->getLesson($group), ['diversion' => true]);
-        }
-
-        $subject = $current->findXPath('./*[@class="p"]');
-
-        if ($current->findXPath('./br')->count() && $spans->count() === 0 && $subject->count() > 1) {
-            foreach (explode('<br>', $current->getOuterHtml()) as $item) {
-                $doc = new Document();
-                $doc->html(str_replace('<td class="l">', '', $item));
-                $hour['lessons'][] = $this->getLesson($doc->find('body')->first());
-            }
-        } elseif ($subject->count() > 0) {
-            $hour['lessons'][] = $this->getLesson($current);
-        }
+        $hour['lessons'] = $this->getExtractedLessons($current);
 
         $className = $current->findXPath('./*[@class="o"]');
         if ($className->count() > 1) {
@@ -127,6 +112,41 @@ class Table
         }
 
         return $hour;
+    }
+
+    private function getExtractedLessons(Element $current): array
+    {
+        $lessons = [];
+
+        $chunks = explode('<br>', $current->getOuterHtml());
+        $spans = $current->find('span[style]');
+        $subject = $current->findXPath('./*[@class="p"]');
+
+        if ($spans->count() === 0 && $subject->count() > 0 & \count($chunks) === 0) { // simple one lesson in hour without division
+            $lessons[] = $this->getLesson($current);
+        } elseif ($spans->count() > 0 && $subject->count() === 0) { // simply two or more groups with division
+            foreach ($spans as $group) {
+                $lessons[] = array_merge($this->getLesson($group), ['diversion' => true]);
+            }
+        } elseif ($subject->count() > 0 && \count($chunks) > 0) {
+            foreach ($chunks as $item) {
+                $doc = new Document();
+                $doc->html($item);
+
+                $span = $doc->find('span[style]');
+                $cell = $doc->find('.l');
+                $body = $doc->find('body');
+                if ($span->count() > 0) {
+                    $lessons[] = array_merge($this->getLesson($span->first()), ['diversion' => true]);
+                } elseif ($cell->count() > 0) {
+                    $lessons[] = $this->getLesson($cell->first());
+                } elseif ($body->count() > 0) {
+                    $lessons[] = $this->getLesson($body->first());
+                }
+            }
+        }
+
+        return $lessons;
     }
 
     private function getLesson(Element $cell): array
