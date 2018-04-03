@@ -97,8 +97,11 @@ class Table
 
         $className = $current->findXPath('./*[@class="o"]');
         if ($className->count() > 1) {
-            unset($hour['lessons'][\count($hour['lessons']) - 1]['className']);
-            unset($hour['lessons'][\count($hour['lessons']) - 1]['alt']);
+            unset(
+                $hour['lessons'][\count($hour['lessons']) - 1]['className'],
+                $hour['lessons'][\count($hour['lessons']) - 1]['alt']
+            );
+
             /** @var Element $item */
             foreach (explode(',', $current->getOuterHtml()) as $item) {
                 $doc = new Document();
