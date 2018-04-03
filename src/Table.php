@@ -68,50 +68,13 @@ class Table
     private function getHourWithLessons(NodeList $rowCells, int $index): array
     {
         $hours = explode('-', $rowCells->get(1)->textContent);
-        $hour = [
+
+        return [
             'number'  => $rowCells->get(0)->textContent,
             'start'   => trim($hours[0]),
             'end'     => trim($hours[1]),
-            'lessons' => [],
+            'lessons' => $this->getExtractedLessons($rowCells->get($index)),
         ];
-
-        /** @var Element $current */
-        $current = $rowCells->get($index);
-
-        $hour['lessons'] = $this->getExtractedLessons($current);
-
-        $className = $current->findXPath('./*[@class="o"]');
-        if ($className->count() > 1) {
-            unset(
-                $hour['lessons'][\count($hour['lessons']) - 1]['className'],
-                $hour['lessons'][\count($hour['lessons']) - 1]['alt']
-            );
-
-            /** @var Element $item */
-            foreach (explode(',', $current->getOuterHtml()) as $item) {
-                $doc = new Document();
-                $doc->html(str_replace('<td class="l">', '', $item));
-                $el = $doc->find('body')->first();
-                $hour['lessons'][\count($hour['lessons']) - 1]['className'][] = [
-                    'name'  => trim($el->find('a.o')->text()),
-                    'value' => $this->getUrlValue($el->find('a.o')->first(), 'o'),
-                    'alt'   => trim($el->findXPath('./text()')->text()),
-                ];
-            }
-        }
-
-        if (\count($hour['lessons']) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {
-            $hour['lessons'][] = [
-                'teacher'   => ['name' => '', 'value' => ''],
-                'room'      => ['name' => '', 'value' => ''],
-                'className' => ['name' => '', 'value' => ''],
-                'subject'   => '',
-                'diversion' => false,
-                'alt'       => trim($current->text()),
-            ];
-        }
-
-        return $hour;
     }
 
     private function getExtractedLessons(Element $current): array
@@ -122,53 +85,85 @@ class Table
         $spans = $current->find('span[style]');
         $subject = $current->findXPath('./*[@class="p"]');
 
-        if ($spans->count() === 0 && $subject->count() > 0 & \count($chunks) === 0) { // simple one lesson in hour without division
-            $lessons[] = $this->getLesson($current);
-        } elseif ($spans->count() > 0 && $subject->count() === 0) { // simply two or more groups with division
+        if ($spans->count() > 0 && $subject->count() === 0) {
             foreach ($spans as $group) {
                 $lessons[] = array_merge($this->getLesson($group), ['diversion' => true]);
             }
         } elseif ($subject->count() > 0 && \count($chunks) > 0) {
             foreach ($chunks as $item) {
-                $doc = new Document();
-                $doc->html($item);
-
-                $span = $doc->find('span[style]');
-                $cell = $doc->find('.l');
-                $body = $doc->find('body');
-                if ($span->count() > 0) {
-                    $lessons[] = array_merge($this->getLesson($span->first()), ['diversion' => true]);
-                } elseif ($cell->count() > 0) {
-                    $lessons[] = $this->getLesson($cell->first());
-                } elseif ($body->count() > 0) {
-                    $lessons[] = $this->getLesson($body->first());
-                }
+                $this->setLessonFromChunk($lessons, $item);
             }
         }
+
+        $this->updateLessonWithMultipleClasses($current, $lessons);
+        $this->setFallbackLesson($current, $lessons);
 
         return $lessons;
     }
 
+    private function setLessonFromChunk(array &$lessons, string $chunk): void
+    {
+        $doc = new Document();
+        $doc->html($chunk);
+
+        $span = $doc->find('span[style]');
+        $cell = $doc->find('.l');
+        $body = $doc->find('body');
+
+        if ($span->count() > 0) {
+            $lessons[] = array_merge($this->getLesson($span->first()), ['diversion' => true]);
+        } elseif ($cell->count() > 0) {
+            $lessons[] = $this->getLesson($cell->first());
+        } elseif ($body->count() > 0) {
+            $lessons[] = $this->getLesson($body->first());
+        }
+    }
+
+    private function setFallbackLesson(Element $current, array &$lessons): void
+    {
+        if (\count($lessons) === 0 && trim($current->text(), "\xC2\xA0\n") !== '') {
+            $lessons[] = [
+                'teacher'   => ['name' => '', 'value' => ''],
+                'room'      => ['name' => '', 'value' => ''],
+                'className' => ['name' => '', 'value' => ''],
+                'subject'   => '',
+                'diversion' => false,
+                'alt'       => trim($current->text()),
+            ];
+        }
+    }
+
+    private function updateLessonWithMultipleClasses(Element $current, array &$lessons): void
+    {
+        if ($current->findXPath('./*[@class="o"]')->count() < 2) {
+            return;
+        }
+
+        $lastIndex = \count($lessons) - 1;
+
+        unset($lessons[$lastIndex]['className'], $lessons[$lastIndex]['alt']);
+
+        /** @var Element $item */
+        foreach (explode(',', $current->getOuterHtml()) as $item) {
+            $doc = new Document();
+            $doc->html(str_replace('<td class="l">', '', $item));
+            $el = $doc->find('body')->first();
+            $lessons[$lastIndex]['className'][] = [
+                'name'  => trim($el->find('a.o')->text()),
+                'value' => $this->getUrlValue($el->find('a.o')->first(), 'o'),
+                'alt'   => trim($el->findXPath('./text()')->text()),
+            ];
+        }
+    }
+
     private function getLesson(Element $cell): array
     {
-        $teacher = $cell->findXPath('./*[@class="n"]');
-        $room = $cell->findXPath('./*[@class="s"]');
-        $className = $cell->findXPath('./*[@class="o"]');
         $subject = $cell->findXPath('./*[@class="p"]');
 
         $lesson = [
-            'teacher'   => [
-                'name'  => $teacher->text(),
-                'value' => $this->getUrlValue($teacher->first(), 'n'),
-            ],
-            'room'      => [
-                'name'  => $room->text(),
-                'value' => $this->getUrlValue($room->first(), 's'),
-            ],
-            'className' => [
-                'name'  => $className->text(),
-                'value' => $this->getUrlValue($className->first(), 'o'),
-            ],
+            'teacher'   => $this->getLessonPartValue($cell->findXPath('./*[@class="n"]'), 'n'),
+            'room'      => $this->getLessonPartValue($cell->findXPath('./*[@class="s"]'), 's'),
+            'className' => $this->getLessonPartValue($cell->findXPath('./*[@class="o"]'), 'o'),
             'subject'   => $subject->text(),
             'diversion' => false,
             'alt'       => trim($cell->findXPath('./text()')->text()),
@@ -181,6 +176,14 @@ class Table
         }
 
         return $lesson;
+    }
+
+    private function getLessonPartValue(NodeList $part, string $prefix): array
+    {
+        return [
+            'name'  => $part->text(),
+            'value' => $this->getUrlValue($part->first(), $prefix),
+        ];
     }
 
     private function getUrlValue(?Element $el, string $prefix): string
