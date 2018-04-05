@@ -32,66 +32,74 @@
                             <?php foreach ((array) $table['days'] as $key => $day): ?>
                                 <?php $lessons = $day['hours'][$i]['lessons']; ?>
                                 <?php if (count($lessons) > 0): ?>
-                                    <td class="l">
-                                        <?php foreach ((array) $lessons as $lesson): ?>
-                                            <?php if (empty($lessons[0]['subject'])): ?>
-                                                <?=$lessons[0]['alt']; ?>
-                                                <?php continue; ?>
-                                            <?php endif; ?>
+                                    <?php if (empty($lessons[0]['subject'])):
+                                        ?><td class="l"><?=$lessons[0]['alt']; ?></td><?php
+                                    else: ?>
+                                        <td class="l">
+                                            <?php foreach ((array) $lessons as $lesson): ?>
 
-                                            <?php if ($lesson['diversion']): ?><span style="font-size:85%"><?php endif; ?>
+                                                <?php if ($lesson['diversion']): ?><span style="font-size:85%"><?php endif; ?>
 
-                                            <?php if ($lesson['teacher']['value'] && empty($lesson['room']['name'])): ?>
-                                                <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
-                                            <?php endif; ?>
-
-                                            <?php if (isset($lesson['className']['value']) && !empty($lesson['className']['value'])): ?>
-                                                <a href="o<?=$lesson['className']['value']; ?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? $lesson['alt']; ?>
-                                            <?php elseif (isset($lesson['className'][0])): ?>
-                                                <?php foreach ((array) $lesson['className'] as $group):
-                                                    ?><a href="o<?= $group['value']; ?>.html" class="o"><?=str_replace($group['alt'], '', $group['name']);
-                                                    ?></a><?=$group['alt']; ?><?php
-                                                    if ($group !== end($lesson['className'])):
-                                                        ?>,<?php endif; ?><?php
-                                                endforeach; ?>
-                                            <?php endif; ?>
-
-                                            <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
-                                            <?php $subject = explode($lesson['alt'], $lesson['subject']); ?>
-                                                <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt']; ?>
-                                                <span class="p"><?=trim($subject[1]); ?></span>
-                                            <?php elseif ($lesson['subject']): ?>
-                                                <span class="p"><?=$lesson['subject']; ?></span>
                                                 <?php if (empty($lesson['room']['name'])): ?>
+                                                    <?php if ($lesson['teacher']['value']): ?>
+                                                        <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
+                                                    <?php elseif ($lesson['teacher']['name']): ?>
+                                                        <span class="n"><?= $lesson['teacher']['name']; ?></span>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
+                                                <?php if (isset($lesson['className']['value']) && !empty($lesson['className']['value'])): ?>
+                                                    <a href="o<?=$lesson['className']['value']; ?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? $lesson['alt']; ?>
+                                                <?php elseif (isset($lesson['className'][0])): ?>
+                                                    <?php foreach ((array) $lesson['className'] as $group):
+                                                        ?><a href="o<?= $group['value']; ?>.html" class="o"><?=str_replace($group['alt'], '', $group['name']);
+                                                        ?></a><?=$group['alt']; ?><?php
+                                                        if ($group !== end($lesson['className'])):
+                                                            ?>,<?php endif; ?><?php
+                                                    endforeach; ?>
+                                                <?php endif; ?>
+
+                                                <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
+                                                <?php $subject = explode($lesson['alt'], $lesson['subject']); ?>
+                                                    <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt']; ?>
+                                                    <span class="p"><?=trim($subject[1]); ?></span>
+                                                <?php elseif ($lesson['subject']): ?>
+                                                    <span class="p"><?=$lesson['subject']; ?></span>
+                                                    <?php if (empty($lesson['room']['name'])): ?>
+                                                        <br>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
+                                                <?php if (isset($lesson['className']['value']) && empty($lesson['className']['value'])): ?>
+                                                    <?php if ($lesson['teacher']['value']): ?>
+                                                        <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
+                                                    <?php elseif ($lesson['teacher']['name']): ?>
+                                                        <span class="n"><?= $lesson['teacher']['name']; ?></span>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
+                                                <?php if ($lesson['room']['name']): ?>
+                                                    <?php if ($lesson['room']['value']): ?>
+                                                        <a href="s<?=$lesson['room']['value']; ?>.html" class="s"><?= $lesson['room']['name']; ?></a>
+                                                    <?php else: ?>
+                                                        <span class="s"><?=$lesson['room']['name']; ?></span>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
+                                                <?php if (is_array($lesson['className']) &&
+                                                    $table['typeName'] === 'nauczyciela' &&
+                                                    $lesson === end($lessons)
+                                                ): ?><br><?php endif; ?>
+
+                                                <?php if ($lesson['diversion']): ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                                <?php if ($lesson !== end($lessons)): ?>
                                                     <br>
                                                 <?php endif; ?>
-                                            <?php endif; ?>
-
-                                            <?php if ($lesson['teacher']['value'] && isset($lesson['className']['value']) && empty($lesson['className']['value'])): ?>
-                                                <a href="n<?= $lesson['teacher']['value']; ?>.html" class="n"><?= $lesson['teacher']['name']; ?></a>
-                                            <?php endif; ?>
-
-                                            <?php if ($lesson['room']['name']): ?>
-                                                <?php if ($lesson['room']['value']): ?>
-                                                    <a href="s<?=$lesson['room']['value']; ?>.html" class="s"><?= $lesson['room']['name']; ?></a>
-                                                <?php else: ?>
-                                                    <span class="s"><?=$lesson['room']['name']; ?></span>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
-
-                                            <?php if (is_array($lesson['className']) &&
-                                                $table['typeName'] === 'nauczyciela' &&
-                                                $lesson === end($lessons)
-                                            ): ?><br><?php endif; ?>
-
-                                            <?php if ($lesson['diversion']): ?>
-                                                </span>
-                                            <?php endif; ?>
-                                            <?php if ($lesson !== end($lessons)): ?>
-                                                <br>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </td>
+                                            <?php endforeach; ?>
+                                        </td>
+                                    <?php endif; ?>
                                 <?php else: ?>
                                     <td class="l">&nbsp;</td>
                                 <?php endif; ?>
