@@ -162,10 +162,17 @@ class Table
             'alt'       => trim($cell->findXPath('./text()')->text()),
         ];
 
-        if ($cell->findXPath('./*[@class="p"]')->count() > 1) {
-            $lesson['subject'] = $subject->first()->text()
-                .trim($cell->findXPath('./text()[(preceding::*[@class="p"])]')->text())
-                .' '.$subject->end()->text();
+        $subjects = $cell->findXPath('./*[@class="p"]');
+        if ($subjects->count() > 1) {
+            $textBetweenSubject = $cell->findXPath('./text()[(preceding::*[@class="p"])]');
+            if (trim($textBetweenSubject->text()) !== '') {
+                $lesson['subject'] = $subject->first()->text().trim($textBetweenSubject->text()).' '.$subject->end()->text();
+            } else {
+                unset($lesson['subject']);
+                foreach ($subjects as $subject) {
+                    $lesson['subject'][] = $subject->text();
+                }
+            }
         }
 
         return $lesson;

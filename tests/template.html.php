@@ -59,15 +59,21 @@
                                                     endforeach; ?>
                                                 <?php endif; ?>
 
-                                                <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
-                                                <?php $subject = explode($lesson['alt'], $lesson['subject']); ?>
-                                                    <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt']; ?>
-                                                    <span class="p"><?=trim($subject[1]); ?></span>
-                                                <?php elseif ($lesson['subject']): ?>
-                                                    <span class="p"><?=$lesson['subject']; ?></span>
-                                                    <?php if (empty($lesson['room']['name'])): ?>
-                                                        <br>
+                                                <?php if (!is_array($lesson['subject'])): ?>
+                                                    <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
+                                                    <?php $subject = explode($lesson['alt'], $lesson['subject']); ?>
+                                                        <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt']; ?>
+                                                        <span class="p"><?=trim($subject[1]); ?></span>
+                                                    <?php elseif ($lesson['subject']): ?>
+                                                        <span class="p"><?=$lesson['subject']; ?></span>
+                                                        <?php if (empty($lesson['room']['name'])): ?>
+                                                            <br>
+                                                        <?php endif; ?>
                                                     <?php endif; ?>
+                                                <?php else: ?>
+                                                    <?php foreach ($lesson['subject'] as $subject): ?>
+                                                        <span class="p"><?=$subject;?></span>
+                                                    <?php endforeach; ?>
                                                 <?php endif; ?>
 
                                                 <?php if (isset($lesson['className']['value']) && empty($lesson['className']['value'])): ?>
