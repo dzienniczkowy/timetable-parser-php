@@ -72,7 +72,7 @@
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <?php foreach ($lesson['subject'] as $subject): ?>
-                                                        <span class="p"><?=$subject;?></span>
+                                                        <span class="p"><?=$subject; ?></span>
                                                     <?php endforeach; ?>
                                                 <?php endif; ?>
 
