@@ -61,10 +61,21 @@ class TimetableList
 
     private function getTimetableUnorderedListType(): array
     {
+        $teacherQ = 'ul:nth-of-type(2) a';
+        $roomsQ = 'ul:nth-of-type(3) a';
+
+        if ($this->doc->find('h4')->count() === 1) {
+            $teacherQ = 'undefined';
+            $roomsQ = 'undefined';
+        } elseif ($this->doc->find('h4:nth-of-type(2)')->text() === 'Sale') {
+            $teacherQ = 'undefined';
+            $roomsQ = 'ul:nth-of-type(2) a';
+        }
+
         return $this->getTimetableUrlSubType(
             'ul:first-of-type a',
-            'ul:nth-of-type(2) a',
-            'ul:nth-of-type(3) a'
+            $teacherQ,
+            $roomsQ
         );
     }
 
