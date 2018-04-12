@@ -22,7 +22,7 @@ class TimetableList
 
     public function getTimetableList(): array
     {
-        if ($this->doc->find('form')->count() > 0) {
+        if ($this->doc->find('form[name=form]')->count() > 0) {
             return $this->getTimetableSelectListType();
         }
 
