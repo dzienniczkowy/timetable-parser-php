@@ -160,7 +160,7 @@ class Table
             'subject'      => $subject->text(),
             'diversion'    => $diversion,
             'alt'          => trim($cell->findXPath('./text()')->text()),
-            'substitution' => $cell->findXPath('./*[@class="zas"]')->text(),
+            'substitution' => $cell->find('.zas')->text(),
         ];
 
         $subjects = $cell->findXPath('./*[@class="p"]');
