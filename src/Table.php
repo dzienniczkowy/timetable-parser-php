@@ -154,12 +154,13 @@ class Table
         $subject = $cell->findXPath('./*[@class="p"]');
 
         $lesson = [
-            'teacher'   => $this->getLessonPartValues($cell->findXPath('./*[@class="n"]'), 'n'),
-            'room'      => $this->getLessonPartValues($cell->findXPath('./*[@class="s"]'), 's'),
-            'className' => $this->getLessonPartValues($cell->findXPath('./*[@class="o"]'), 'o'),
-            'subject'   => $subject->text(),
-            'diversion' => $diversion,
-            'alt'       => trim($cell->findXPath('./text()')->text()),
+            'teacher'      => $this->getLessonPartValues($cell->findXPath('./*[@class="n"]'), 'n'),
+            'room'         => $this->getLessonPartValues($cell->findXPath('./*[@class="s"]'), 's'),
+            'className'    => $this->getLessonPartValues($cell->findXPath('./*[@class="o"]'), 'o'),
+            'subject'      => $subject->text(),
+            'diversion'    => $diversion,
+            'alt'          => trim($cell->findXPath('./text()')->text()),
+            'substitution' => $cell->findXPath('./*[@class="zas"]')->text(),
         ];
 
         $subjects = $cell->findXPath('./*[@class="p"]');
