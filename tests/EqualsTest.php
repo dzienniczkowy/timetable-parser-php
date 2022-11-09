@@ -44,6 +44,7 @@ class EqualsTest extends TestCase
         $doc->html($html);
         $doc->find('.tabela');
         $html = $doc->find('.tabela')->first()->getHtml();
+
         return str_replace(' ', '', $html);
     }
 }
