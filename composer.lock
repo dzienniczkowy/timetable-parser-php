@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3b46c7b05095cb44ddcfcef3ae29529",
+    "content-hash": "134f76558f30d42446743498a1929b82",
     "packages": [
         {
             "name": "scotteh/php-dom-wrapper",
@@ -202,50 +202,6 @@
                 }
             ],
             "time": "2022-03-03T08:28:38+00:00"
-        },
-        {
-            "name": "mihaeu/html-formatter",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mihaeu/html-formatter.git",
-                "reference": "a376177343ffe5484f8457f699237c1863b7cfd5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mihaeu/html-formatter/zipball/a376177343ffe5484f8457f699237c1863b7cfd5",
-                "reference": "a376177343ffe5484f8457f699237c1863b7cfd5",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Mihaeu": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Haeuslmann",
-                    "email": "haeuslmann@gmail.com"
-                }
-            ],
-            "description": "HTML Formatter pritifies HTML content by applying proper intendation (no tidy, purification, etc.).",
-            "homepage": "https://github.com/mihaeu/html-formatter",
-            "keywords": [
-                "clean",
-                "formatter",
-                "html",
-                "pretty"
-            ],
-            "support": {
-                "issues": "https://github.com/mihaeu/html-formatter/issues",
-                "source": "https://github.com/mihaeu/html-formatter/tree/1.0.0"
-            },
-            "time": "2013-11-26T11:55:02+00:00"
         },
         {
             "name": "myclabs/deep-copy",
