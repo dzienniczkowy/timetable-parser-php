@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^7.1|^8.0",
+        "php": "^8.1",
         "scotteh/php-dom-wrapper": "^2.0",
         "ext-dom": "*"
     },

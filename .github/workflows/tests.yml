@@ -16,8 +16,12 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.1'
       - name: Install PHP dependencies
         run: composer install
+      - name: Prepare code coverage
+        run: mkdir -p ~/phpunit
       - name: Run PHP tests
-        run: ./vendor/bin/phpunit
+        run: ./vendor/bin/phpunit --log-junit ~/phpunit/junit.xml --coverage-clover=coverage.xml
+      - name: Run codecov
+        run: bash <(curl -s https://codecov.io/bash)
