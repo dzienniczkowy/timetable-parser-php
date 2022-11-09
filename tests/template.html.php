@@ -27,7 +27,9 @@
                     <?php foreach ((array) $table['days'][0]['hours'] as $i => $hour): ?>
                         <tr>
                             <td class="nr"><?= $hour['number']; ?></td>
-                            <td class="g"><?=$hour['start'] < 10 ? ' ' : ''; ?><?= $hour['start']; ?>-<?=$hour['end'] < 10 ? ' ' : ''; ?><?= $hour['end']; ?></td>
+                            <?php $startHour = explode(':', $hour['start']); ?>
+                            <?php $endHour = explode(':', $hour['end']); ?>
+                            <td class="g"><?=(int)($startHour[0]) < 10 ? ' ' : ''; ?><?= $hour['start']; ?>-<?=(int)($endHour[0]) < 10 ? ' ' : ''; ?><?= $hour['end']; ?></td>
 
                             <?php foreach ((array) $table['days'] as $key => $day): ?>
                                 <?php $lessons = $day['hours'][$i]['lessons']; ?>
@@ -35,8 +37,7 @@
                                     <?php if (empty($lessons[0]['subject'])):
                                         ?><td class="l"><?=$lessons[0]['alt']; ?></td><?php
                                     else: ?>
-                                        <td class="l">
-                                            <?php foreach ((array) $lessons as $lesson): ?>
+                                        <td class="l"><?php foreach ((array) $lessons as $lesson): ?>
 
                                                 <?php if ($lesson['diversion']): ?><span style="font-size:85%"><?php endif; ?>
 
@@ -49,7 +50,7 @@
                                                 <?php endif; ?>
 
                                                 <?php if (isset($lesson['className']['value']) && !empty($lesson['className']['value'])): ?>
-                                                    <a href="o<?=$lesson['className']['value']; ?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? $lesson['alt']; ?>
+                                                    <a href="o<?=$lesson['className']['value']; ?>.html" class="o"><?=$lesson['className']['name']; ?></a><?=$lesson['alt'] ?? ''; ?>
                                                 <?php elseif (isset($lesson['className'][0])): ?>
                                                     <?php foreach ((array) $lesson['className'] as $group):
                                                         ?><a href="o<?= $group['value']; ?>.html" class="o"><?=str_replace($group['alt'], '', $group['name']);
@@ -60,15 +61,13 @@
                                                 <?php endif; ?>
 
                                                 <?php if (!is_array($lesson['subject'])): ?>
-                                                    <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false): ?>
+                                                    <?php if (@strpos($lesson['subject'], $lesson['alt']) !== false && @strlen($lesson['alt'])): ?>
                                                     <?php $subject = explode($lesson['alt'], $lesson['subject']); ?>
                                                         <span class="p"><?=$subject[0]; ?></span><?=$lesson['alt']; ?>
                                                         <span class="p"><?=trim($subject[1]); ?></span>
                                                     <?php elseif ($lesson['subject']): ?>
                                                         <span class="p"><?=$lesson['subject']; ?></span>
-                                                        <?php if (empty($lesson['room']['name'])): ?>
-                                                            <br>
-                                                        <?php endif; ?>
+                                                        <?php if (empty($lesson['room']['name'])): ?><br><?php endif; ?>
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <?php foreach ($lesson['subject'] as $subject): ?>
@@ -100,11 +99,7 @@
                                                 <?php if ($lesson['diversion']): ?>
                                                     </span>
                                                 <?php endif; ?>
-                                                <?php if ($lesson !== end($lessons)): ?>
-                                                    <br>
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                        </td>
+                                                <?php if ($lesson !== end($lessons)): ?><br><?php endif; ?><?php endforeach; ?></td>
                                     <?php endif; ?>
                                 <?php else: ?>
                                     <td class="l">&nbsp;</td>

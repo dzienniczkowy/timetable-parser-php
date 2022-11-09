@@ -13,16 +13,16 @@ class TimetableListTest extends TestCase
 
     private $expandable;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->select = new TimetableList(file_get_contents(__DIR__.'/fixtures/lista-form.html'));
-        $this->list = new TimetableList(file_get_contents(__DIR__.'/fixtures/lista-unordered.html'));
-        $this->expandable = new TimetableList(file_get_contents(__DIR__.'/fixtures/lista-expandable.html'));
+        $this->select = new TimetableList(file_get_contents(__DIR__ . '/fixtures/lista-form.html'));
+        $this->list = new TimetableList(file_get_contents(__DIR__ . '/fixtures/lista-unordered.html'));
+        $this->expandable = new TimetableList(file_get_contents(__DIR__ . '/fixtures/lista-expandable.html'));
     }
 
     public function testGetListUrl(): void
     {
-        $index = new TimetableList(file_get_contents(__DIR__.'/fixtures/index.html'));
+        $index = new TimetableList(file_get_contents(__DIR__ . '/fixtures/index.html'));
         $this->assertEquals('lista.html', $index->getListUrl());
     }
 

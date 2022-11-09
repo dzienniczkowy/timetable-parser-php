@@ -11,7 +11,7 @@ class TableTest extends TestCase
 
     private $tableRoom;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->table = new Table(file_get_contents(__DIR__.'/fixtures/oddzial.html'));
         $this->tableRoom = new Table(file_get_contents(__DIR__.'/fixtures/sala.html'));
@@ -141,7 +141,7 @@ class TableTest extends TestCase
         $this->assertEquals('4Tm', $this->tableRoom->getTable()['days'][0]['hours'][0]['lessons'][0]['className']['name']);
         $this->assertEquals('4Tp', $this->tableRoom->getTable()['days'][1]['hours'][0]['lessons'][0]['className']['name']);
 
-        $this->assertInternalType('array', $this->tableRoom->getTable()['days'][3]['hours'][0]['lessons'][0]['className']);
+        $this->assertIsArray($this->tableRoom->getTable()['days'][3]['hours'][0]['lessons'][0]['className']);
         $this->assertEquals('3Tk', $this->tableRoom->getTable()['days'][3]['hours'][0]['lessons'][0]['className'][0]['name']);
         $this->assertEquals('3Te', $this->tableRoom->getTable()['days'][3]['hours'][0]['lessons'][0]['className'][2]['name']);
     }
