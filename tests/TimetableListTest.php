@@ -7,11 +7,11 @@ use Wulkanowy\TimetableParser\TimetableList;
 
 class TimetableListTest extends TestCase
 {
-    private $select;
+    private TimetableList $select;
 
-    private $list;
+    private TimetableList $list;
 
-    private $expandable;
+    private TimetableList $expandable;
 
     public function setUp(): void
     {

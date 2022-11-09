@@ -24,7 +24,7 @@ class EqualsTest extends TestCase
         $this->assertEquals($this->format($remote), $this->format($actual));
     }
 
-    private function getGeneratedHTML(string $html)
+    private function getGeneratedHTML(string $html): bool|string
     {
         $table = (new Table($html))->getTable();
 

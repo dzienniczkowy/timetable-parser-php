@@ -7,9 +7,9 @@ use Wulkanowy\TimetableParser\Table;
 
 class TableTest extends TestCase
 {
-    private $table;
+    private Table $table;
 
-    private $tableRoom;
+    private Table $tableRoom;
 
     public function setUp(): void
     {
