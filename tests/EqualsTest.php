@@ -18,7 +18,7 @@ class EqualsTest extends TestCase
 
     public function testRoom(): void
     {
-        $remote = file_get_contents(__DIR__ . '/fixtures/sala.html');
+        $remote = file_get_contents(__DIR__.'/fixtures/sala.html');
         $actual = $this->getGeneratedHTML($remote);
 
         $this->assertEquals($this->format($remote), $this->format($actual));
@@ -29,7 +29,7 @@ class EqualsTest extends TestCase
         $table = (new Table($html))->getTable();
 
         ob_start();
-        require __DIR__ . '/template.html.php';
+        require __DIR__.'/template.html.php';
         $rendered = ob_get_contents();
         ob_end_clean();
 
